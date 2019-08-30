@@ -16,7 +16,7 @@ import net.corda.core.schemas.QueryableState
 // * State *
 // *********
 @BelongsToContract(KycContract::class)
- class KycState(val name: String = "not_shared", val address: String = "not_shared", val dob: String = "not_shared", val email: String ="not_shared",val owner: Party , val bank: Party,override val linearId: UniqueIdentifier = UniqueIdentifier() ) : LinearState , QueryableState {
+ class KycState(val name: String = "not_shared", val address: String = "not_shared", val email: String ="not_shared",val document1: String ="not_shared",val document2: String ="not_shared",val owner: Party , val bank: Party,override val linearId: UniqueIdentifier = UniqueIdentifier() ) : LinearState , QueryableState {
 
        // get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val participants: List<AbstractParty> get() = listOf(owner,bank)
@@ -27,9 +27,12 @@ import net.corda.core.schemas.QueryableState
                     this.bank.name.toString(),
                     this.address,
                     this.linearId.id,
-                    this.dob,
-                    this. email,
-                    this.name
+                    this.email,
+                    this.name,
+                    this.document1,
+                    this.document2
+
+
             )
             else -> throw IllegalArgumentException("Unrecognised schema $schema")
         }

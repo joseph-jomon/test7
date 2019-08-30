@@ -83,9 +83,14 @@ class Controller(rpc: NodeRPCConnection) {
     fun createKyc(request: HttpServletRequest): ResponseEntity<String> {
         val kycname= request.getParameter("kname")
         val kycaddress = request.getParameter("kaddress")
-        val kycdob = request.getParameter("kdob")
+        //val kycdob = request.getParameter("kdob")
         val  kycemail = request.getParameter("kemail")
         val  partyName = request.getParameter("partyName")
+        val  kycDocument1 = request.getParameter("kDocument1")
+        val  kycDocument2 = request.getParameter("kDocument2")
+       // val  kycDocument3 = request.getParameter("Document3")
+       // val  kycDocument4 = request.getParameter("Document4")
+
         if(partyName == null){
             return ResponseEntity.badRequest().body("Query parameter 'partyName' must not be null.\n")
         }
@@ -94,7 +99,7 @@ class Controller(rpc: NodeRPCConnection) {
         val otherParty = proxy.wellKnownPartyFromX500Name(partyX500Name) ?: return ResponseEntity.badRequest().body("Party named $partyName cannot be found.\n")
 
         return try {
-            val signedTx = proxy.startTrackedFlow(::KycIssueFlow, kycname,kycaddress,kycdob, kycemail, otherParty).returnValue.getOrThrow()
+            val signedTx = proxy.startTrackedFlow(::KycIssueFlow, kycname,kycaddress, kycemail,kycDocument1,kycDocument2, otherParty).returnValue.getOrThrow()
             ResponseEntity.status(HttpStatus.CREATED).body("Transaction id ${signedTx.id} committed to ledger.\n")
 
         } catch (ex: Throwable) {
@@ -106,11 +111,13 @@ class Controller(rpc: NodeRPCConnection) {
 
     @PostMapping(value = [ "update-kyc" ], produces = [ TEXT_PLAIN_VALUE ], headers = [ "Content-Type=application/x-www-form-urlencoded" ])
     fun updateKyc(request: HttpServletRequest): ResponseEntity<String> {
-        val kycname= request.getParameter("kname")
+         val kycname= request.getParameter("kname")
         val kycaddress = request.getParameter("kaddress")
-        val kycdob = request.getParameter("kdob")
-        val  kycemail = request.getParameter("kemail")
+        //val kycdob = request.getParameter("kdob")
+      //  val  kycemail = request.getParameter("kemail")
         val  partyName = request.getParameter("partyName")
+        val  kycDocument1 = request.getParameter("kDocument1")
+        val  kycDocument2 = request.getParameter("kDocument2")
         val  kycidastring = request.getParameter("KycId")
         if(partyName == null){
             return ResponseEntity.badRequest().body("Query parameter 'partyName' must not be null.\n")
@@ -120,7 +127,7 @@ class Controller(rpc: NodeRPCConnection) {
         val otherParty = proxy.wellKnownPartyFromX500Name(partyX500Name) ?: return ResponseEntity.badRequest().body("Party named $partyName cannot be found.\n")
 
         return try {
-            var signedTx = proxy.startTrackedFlow(::KycUpdateFlow, kycname,kycaddress,kycdob, kycemail, otherParty, UniqueIdentifier.fromString(kycidastring)).returnValue.getOrThrow()
+            var signedTx = proxy.startTrackedFlow(::KycUpdateFlow, kycname, kycaddress,kycDocument1,kycDocument2, otherParty, UniqueIdentifier.fromString(kycidastring)).returnValue.getOrThrow()
             logger.info("signedTx ========= "+signedTx);
             ResponseEntity.status(HttpStatus.CREATED).body("Transaction id ${signedTx.id} committed to ledger.\n")
             //ResponseEntity.status(HttpStatus.CREATED).body("Transaction id committed to ledger.\n")

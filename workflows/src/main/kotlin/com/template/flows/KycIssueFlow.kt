@@ -17,7 +17,7 @@ import net.corda.core.utilities.ProgressTracker
 // *********
 @InitiatingFlow
 @StartableByRPC
-class KycIssueFlow(val kname: String = "not_shared",val kaddress: String = "not_shared",val kdob: String = "not_shared",val kemail: String = "not_shared", val otherParty: Party ) : FlowLogic<SignedTransaction>() {
+class KycIssueFlow(val kname: String = "not_shared",val kaddress: String = "not_shared",val kemail: String = "not_shared",val kDocument1: String ="not_shared",val kDocument2: String ="not_shared",val otherParty: Party ) : FlowLogic<SignedTransaction>() {
 
 
     override val progressTracker = ProgressTracker()
@@ -27,7 +27,7 @@ class KycIssueFlow(val kname: String = "not_shared",val kaddress: String = "not_
         // We retrieve the notary identity from the network map.
         val notary = serviceHub.networkMapCache.notaryIdentities[0]
         // We create the transaction components.
-        val outputState = KycState(kname,kaddress,kdob,kemail, ourIdentity, otherParty)
+        val outputState = KycState(kname,kaddress,kemail,kDocument1,kDocument2, ourIdentity, otherParty)
 
             val command = Command(KycContract.Commands.IssueKyc(), listOf(ourIdentity.owningKey, otherParty.owningKey))
             //override fun hashCode(): Int = otherParty.owningKey.hashCode()

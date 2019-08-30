@@ -13,7 +13,7 @@ import javax.persistence.Table
 object KycSchema
 
 /**
- * An KycState schema.
+ * A KycState schema.
  */
 object KycSchemaV1 : MappedSchema(
         schemaFamily = KycSchema.javaClass,
@@ -37,15 +37,20 @@ object KycSchemaV1 : MappedSchema(
             @Column(name = "address")
             var address: String,
 
-            @Column(name = "dob")
-            var dob: String,
+           // @Column(name = "dob")
+           // var dob: String,
             @Column(name = "email")
-             var email: String
+             var email: String,
+            @Column(name = "document1")
+            var document1: String,
+            @Column(name = "document2")
+            var document2: String
+
 
 
 
     ) : PersistentState() {
         // Default constructor required by hibernate.
-        constructor(): this("", "", "", UUID.randomUUID(), "", "", "")
+        constructor(): this("","","", UUID.randomUUID(), "", "", "","")
     }
 }
